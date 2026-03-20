@@ -9,44 +9,17 @@
 <hr>
 
 >[!IMPORTANT]
-> LemLib is being written from scratch for its upcoming v0.6.0 release. You can find the source code for the latest stable version of LemLib [here](https://github.com/LemLib/LemLib/tree/stable)
+> LemLib is being written from scratch for its upcoming v0.6.0 release. LemLib-X will not be compatible with v0.6.0 until its full release. You can find the source code for the latest stable version of LemLib [here](https://github.com/LemLib/LemLib/tree/stable)
 
-Welcome to LemLib! This open-source PROS template aims to introduce common algorithms like Pure Pursuit and Odometry for new and experienced teams alike.
+LemLib-X is a fork of LemLib, a template for PROS meant to add features such as odometry and pure pursuit to V5. LemLib-X is intended to expand upon the feature list, adding things such as a PID tuning interface and macro functions without compromising performance and features.
 
-The creation of this template was inspired by [EZ-Template](https://github.com/EZ-Robotics/EZ-Template) and [OkapiLib](https://github.com/OkapiLib/OkapiLib). We aim to develop a library that strikes a balance between ease-of-use, akin to that of EZ-Template, and comprehensive functionality, similar to that of OkapiLib.
-
-> Want a place to chat with the devs and other users? Join our [Discord server](https://discord.gg/pCHr7XZUTj).
+LemLib-X was inspired by [LemLib](https://github.com/LemLib/LemLib/tree/stable) (no way), [EZ-Template](https://github.com/EZ-Robotics/EZ-Template) and [OkapiLib](https://github.com/OkapiLib/OkapiLib). While LemLib is often considered the best at what it does, LemLib-X intends to expand this specialty further.
 
 ## License
 This project is licensed under the MIT license. Check [LICENSE](https://github.com/LemLib/LemLib/blob/master/LICENSE) for more details.
 
 ## Features
-- Generic PID class
-- Odometry
-  - Supports IMU
-  - Works without tracking wheels
-  - Supports all tracking wheels configurations
-- Turn to face point
-- Turn to face heading
-- Swing to face point
-- Swing to face heading 
-- Move to Pose via boomerang
-- Path Following via pure pursuit
-- Motion Chaining
-- Driver Control
-  - Expo drive curves
-  - Smooth deadzone compensation
-  - Minimum output
-  - Arcade control (single or double stick)
-  - Tank control
-  - Curvature control (single or double stick)
-  - turn-steer prioritization
-
-## Example Project
-You can find a fully annotated example project [here](https://github.com/LemLib/LemLib/blob/stable/src/main.cpp).
-
-## Tutorials
-The [tutorials](https://lemlib.readthedocs.io/en/stable/tutorials/1_getting_started.html) provide a detailed walkthrough through all the features of LemLib. It covers everything from installation to Path Following:
+- [WIP]
 
 ## FAQ
 _**1. Help! Why is my controller vibrating?**_
@@ -83,7 +56,7 @@ In other words, you need to know how LemLib works. You don't need to know the de
 Check out the [Documentation](https://lemlib.readthedocs.io/en/stable/index.html).
 
 ## Contributing
-Want to contribute? Please read [CONTRIBUTING.md](https://github.com/LemLib/LemLib/blob/master/.github/CONTRIBUTING.md) and join our [Discord server](https://discord.gg/pCHr7XZUTj).
+Want to contribute? Please read [CONTRIBUTING.md](https://github.com/LemLib/LemLib/blob/master/.github/CONTRIBUTING.md).
 
 ## Code of Conduct
 See the [Code of Conduct](https://github.com/LemLib/LemLib/blob/master/.github/CODE_OF_CONDUCT.md) on how to behave like an adult.
