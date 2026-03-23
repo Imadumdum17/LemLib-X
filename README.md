@@ -45,15 +45,15 @@ _**6. What are the units?**_
 The units are inches and degrees.
 In a future release, Qunits will be used so you can use whatever units you like.
 
-_**7. Is LemLib V5RC legal?**_
+_**7. Is LemLib-X V5RC legal?**_
 Yes.
 Per the RECF student-centred policy, in the context of third-party libraries.
 > Students should be able to understand and explain the code used on their robots
 
-In other words, you need to know how LemLib works. You don't need to know the details like all the math, just more or less how the algorithm works. If you want to learn more about LemLib, you can look through the documentation and ask questions on our Discord server.
+In other words, you need to know how LemLib-X works. You don't need to know the details like all the math, just more or less how the algorithm works.
 
 ## Documentation
-Check out the [Documentation](https://lemlib.readthedocs.io/en/stable/index.html).
+Check out the [Documentation](https://lemlib-xf.readthedocs.io/en/stable/index.html).
 
 ## Contributing
 Want to contribute? Please read [CONTRIBUTING.md](https://github.com/LemLib/LemLib/blob/master/.github/CONTRIBUTING.md).

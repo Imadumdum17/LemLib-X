@@ -8,8 +8,8 @@
 #include "units/Pose.hpp"
 #include <functional>
 
-extern const lemlib::PID angular_pid;
-extern const lemlib::PID lateral_pid;
+extern lemlib::PID angular_pid;
+extern lemlib::PID lateral_pid;
 
 extern const std::function<units::Pose()> pose_getter;
 
@@ -25,3 +25,7 @@ extern const Number drift_compensation;
 
 extern const Number angular_slew;
 extern const Number lateral_slew;
+
+// Functions to set PID values at runtime
+void setAngularPID(const lemlib::PID& pid);
+void setLateralPID(const lemlib::PID& pid);

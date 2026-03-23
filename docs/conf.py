@@ -37,13 +37,13 @@ html_theme_options = {
     "source_directory": "docs/",
 
     "light_css_variables": {
-        "color-brand-primary": "#00C852",
-        "color-brand-content": "#00C852",
+        "color-brand-primary": "#00ffb7",
+        "color-brand-content": "#00ffb7",
     },
 
     "dark_css_variables": {
-        "color-brand-primary": "#00C852",
-        "color-brand-content": "#00C852",
+        "color-brand-primary": "#00ffb7",
+        "color-brand-content": "#00ffb7",
 
     },
 }

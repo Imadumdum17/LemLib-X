@@ -1,8 +1,22 @@
 #include "lemlib/util.hpp"
+#include "lemlib/config.hpp"
 
 using namespace units;
 
 namespace lemlib {
+
+// Default PID controllers - can be modified at runtime
+lemlib::PID angular_pid(0, 0, 0);
+lemlib::PID lateral_pid(0, 0, 0);
+
+// Setter functions
+void setAngularPID(const lemlib::PID& pid) {
+    angular_pid = pid;
+}
+
+void setLateralPID(const lemlib::PID& pid) {
+    lateral_pid = pid;
+}
 
 Angle angleError(Angle target, Angle position, std::optional<AngularDirection> direction) {
     // Wrap the angle to be within 0pi and 2pi radians
