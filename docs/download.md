@@ -11,8 +11,8 @@ If you don't want to re-download LemLib every time a new release comes out, we'v
 You can use the following commands to add the depot to your `pros-cli` installation.
 
 ```bash
-pros c add-depot LemLib https://raw.githubusercontent.com/LemLib/LemLib/depot/stable.json # adds LemLib's stable depot
-pros c apply LemLib # applies latest stable version of LemLib
+pros c add-depot LemLib-X https://raw.githubusercontent.com/Imadumdum17/LemLib-x/depot/stable.json # adds LemLib's stable depot
+pros c apply LemLib-X # applies latest stable version of LemLib
 ```
 
 To update LemLib, all you have to do is run the following command:
