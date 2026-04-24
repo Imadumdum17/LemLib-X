@@ -10,6 +10,9 @@
 #include "lemlib/motions/turnTo.hpp" // IWYU pragma: keep
 #include "lemlib/tracking/TrackingWheelOdom.hpp" // IWYU pragma: keep
 #include "lemlib/MotionHandler.hpp" // IWYU pragma: keep
+#include "lemlib/Page.hpp" // IWYU pragma: keep
+#include "lemlib/PageManager.hpp" // IWYU pragma: keep
+#include "lemlib/ExamplePages.hpp" // IWYU pragma: keep
 
 #ifndef LEMLIB_NO_ALIAS
 namespace ll = lemlib;

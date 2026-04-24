@@ -26,6 +26,6 @@ extern const Number drift_compensation;
 extern const Number angular_slew;
 extern const Number lateral_slew;
 
-// Functions to set PID values at runtime
+// functions to set PID values at runtime
 void setAngularPID(const lemlib::PID& pid);
 void setLateralPID(const lemlib::PID& pid);
