@@ -4,7 +4,7 @@
 #include "hardware/Port.hpp"
 #include "pros/rotation.hpp"
 
-namespace lemlib {
+namespace lemlib_x {
 /**
  * @brief Encoder implementation for the V5 Rotation sensor
  *
@@ -159,8 +159,9 @@ class V5RotationSensor : public Encoder {
          */
         int setReversed(bool reversed);
     private:
+        pros::Rotation m_rotation;
         Angle m_offset = 0_stRot;
         bool m_reversed;
         int m_port;
 };
-} // namespace lemlib
+} // namespace lemlib_x

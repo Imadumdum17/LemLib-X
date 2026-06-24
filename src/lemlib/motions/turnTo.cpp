@@ -8,7 +8,7 @@
 
 using namespace units;
 
-namespace lemlib {
+namespace lemlib_x {
 
 static logger::Helper logHelper("lemlib/motions/turnTo");
 
@@ -62,7 +62,7 @@ void turnTo(std::variant<Angle, V2Position> target, Time timeout, TurnToParams p
         else settings.rightMotors.setBrakeMode(BrakeMode::BRAKE);
     }
 
-    lemlib::MotionCancelHelper helper(10_msec); // cancel helper
+    MotionCancelHelper helper(10_msec); // cancel helper
     // loop until the motion has been cancelled, the timer is done, or an exit condition has been met
     while (helper.wait() && !timer.isDone() && !settings.exitConditions.update(deltaTheta)) {
         // get the robot's current position
@@ -121,4 +121,4 @@ void turnTo(std::variant<Angle, V2Position> target, Time timeout, TurnToParams p
     settings.leftMotors.brake();
     settings.rightMotors.brake();
 }
-} // namespace lemlib
+} // namespace lemlib_x

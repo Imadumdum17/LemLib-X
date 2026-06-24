@@ -3,18 +3,18 @@
 
 using namespace units;
 
-namespace lemlib {
+namespace lemlib_x {
 
 // Default PID controllers - can be modified at runtime
-lemlib::PID angular_pid(0, 0, 0);
-lemlib::PID lateral_pid(0, 0, 0);
+PID angular_pid(0, 0, 0);
+PID lateral_pid(0, 0, 0);
 
 // Setter functions
-void setAngularPID(const lemlib::PID& pid) {
+void setAngularPID(const PID& pid) {
     angular_pid = pid;
 }
 
-void setLateralPID(const lemlib::PID& pid) {
+void setLateralPID(const PID& pid) {
     lateral_pid = pid;
 }
 
@@ -74,4 +74,4 @@ Curvature getSignedTangentArcCurvature(Pose start, V2Position end) {
     return side * ((2 * x) / (d * d));
 }
 
-} // namespace lemlib
+} // namespace lemlib_x

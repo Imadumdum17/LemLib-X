@@ -4,7 +4,7 @@
 #include "hardware/IMU/IMU.hpp"
 #include "pros/imu.hpp"
 
-namespace lemlib {
+namespace lemlib_x {
 class V5InertialSensor : public IMU {
     public:
         /**
@@ -253,4 +253,4 @@ class V5InertialSensor : public IMU {
         Angle m_offset = 0_stRot;
         pros::Imu m_imu;
 };
-} // namespace lemlib
+} // namespace lemlib_x

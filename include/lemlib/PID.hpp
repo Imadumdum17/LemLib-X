@@ -2,7 +2,7 @@
 
 #include "units/units.hpp"
 
-namespace lemlib {
+namespace lemlib_x {
 /**
  * @brief Struct to hold PID gains.
  *
@@ -169,4 +169,4 @@ class PID {
 
         std::optional<Time> m_previousTime = std::nullopt;
 };
-} // namespace lemlib
+} // namespace lemlib_x

@@ -3,7 +3,7 @@
 #include "lemlib/config.hpp"
 #include <functional>
 
-namespace lemlib {
+namespace lemlib_x {
 
 struct MoveToPointParams {
         bool reversed = false;
@@ -20,10 +20,10 @@ struct MoveToPointSettings {
         PID lateralPID = lateral_pid;
         ExitConditionGroup<Length> exitConditions = lateral_exit_conditions;
         std::function<units::Pose()> poseGetter = pose_getter;
-        lemlib::MotorGroup& leftMotors = left_motors;
-        lemlib::MotorGroup& rightMotors = right_motors;
+        MotorGroup& leftMotors = left_motors;
+        MotorGroup& rightMotors = right_motors;
 };
 
 void moveToPoint(units::V2Position target, Time timeout, MoveToPointParams params, MoveToPointSettings settings);
 
-}; // namespace lemlib
+}; // namespace lemlib_x

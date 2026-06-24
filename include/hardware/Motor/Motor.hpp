@@ -5,7 +5,7 @@
 #include "hardware/Port.hpp"
 #include "units/Temperature.hpp"
 
-namespace lemlib {
+namespace lemlib_x {
 
 enum class BrakeMode { COAST, BRAKE, HOLD, INVALID };
 
@@ -484,4 +484,4 @@ class Motor : public Encoder {
         Angle m_offset = 0_stDeg;
         ReversibleSmartPort m_port;
 };
-} // namespace lemlib
+} // namespace lemlib_x

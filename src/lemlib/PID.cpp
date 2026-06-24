@@ -1,7 +1,7 @@
 #include "lemlib/PID.hpp"
 #include "pros/rtos.hpp"
 
-namespace lemlib {
+namespace lemlib_x {
 
 using namespace units;
 
@@ -17,7 +17,7 @@ PID::PID(const Gains& gains, Number windupRange, bool signFlipReset)
 
 Gains PID::getGains() { return m_gains; }
 
-void PID::setGains(lemlib::Gains gains) { m_gains = gains; }
+void PID::setGains(Gains gains) { m_gains = gains; }
 
 Number PID::update(Number error) {
     // find time delta
@@ -42,17 +42,17 @@ Number PID::update(Number error) {
     return error * m_gains.kP + m_integral * m_gains.kI + derivative * m_gains.kD;
 }
 
-void lemlib::PID::reset() {
+void PID::reset() {
     m_previousError = 0;
     m_integral = 0;
 }
 
-void lemlib::PID::setSignFlipReset(bool signFlipReset) { m_signFlipReset = signFlipReset; }
+void PID::setSignFlipReset(bool signFlipReset) { m_signFlipReset = signFlipReset; }
 
-bool lemlib::PID::getSignFlipReset() { return m_signFlipReset; }
+bool PID::getSignFlipReset() { return m_signFlipReset; }
 
-void lemlib::PID::setWindupRange(Number windupRange) { m_windupRange = windupRange; }
+void PID::setWindupRange(Number windupRange) { m_windupRange = windupRange; }
 
-Number lemlib::PID::getWindupRange() { return m_windupRange; }
+Number PID::getWindupRange() { return m_windupRange; }
 
-} // namespace lemlib
+} // namespace lemlib_x

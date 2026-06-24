@@ -4,7 +4,7 @@
 #include "lemlib/Page.hpp"
 #include "lemlib/PageManager.hpp"
 
-namespace lemlib {
+namespace lemlib_x {
 
 /**
  * @brief Example home/menu page
@@ -51,6 +51,6 @@ private:
     std::vector<TouchButton> buttons;
 };
 
-} // namespace lemlib
+} // namespace lemlib_x
 
 #endif // LEMLIB_EXAMPLE_PAGES_HPP

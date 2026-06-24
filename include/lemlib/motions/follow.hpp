@@ -3,7 +3,7 @@
 #include "lemlib/config.hpp"
 #include "hot-cold-asset/asset.hpp"
 
-namespace lemlib {
+namespace lemlib_x {
 struct FollowParams {
         bool reversed = false;
         Number lateralSlew = lateral_slew;
@@ -12,9 +12,9 @@ struct FollowParams {
 struct FollowSettings {
         Length trackWidth = track_width;
         std::function<units::Pose()> poseGetter = pose_getter;
-        lemlib::MotorGroup& leftMotors = left_motors;
-        lemlib::MotorGroup& rightMotors = right_motors;
+        MotorGroup& leftMotors = left_motors;
+        MotorGroup& rightMotors = right_motors;
 };
 
 void follow(const asset& path, Length lookaheadDistance, Time timeout, FollowParams params, FollowSettings settings);
-} // namespace lemlib
+} // namespace lemlib_x

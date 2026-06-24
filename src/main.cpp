@@ -1,5 +1,5 @@
 #include "main.h"
-#include "lemlog/logger/sinks/terminal.hpp"
+#include "LemLog/logger/sinks/terminal.hpp"
 #include "hardware/Motor/MotorGroup.hpp"
 #include "hardware/IMU/V5InertialSensor.hpp"
 #include "lemlib/tracking/TrackingWheelOdom.hpp"
@@ -8,18 +8,18 @@
 
 logger::Terminal terminal;
 
-lemlib::MotorGroup rightDrive({8, 10}, 360_rpm);
-lemlib::MotorGroup leftDrive({-1, 11, -12, 13}, 360_rpm);
+lemlib_x::MotorGroup rightDrive({8, 10}, 360_rpm);
+lemlib_x::MotorGroup leftDrive({-1, 11, -12, 13}, 360_rpm);
 
-lemlib::V5InertialSensor imu(1);
+lemlib_x::V5InertialSensor imu(1);
 
-lemlib::TrackingWheel verticalTracker('E', 'F', true, 2.75_in, 26.5_cm / 2);
-lemlib::TrackingWheel horizontalTracker('G', 'H', false, 2.75_in, -26.5_cm / 2);
+lemlib_x::TrackingWheel verticalTracker('E', 'F', true, 2.75_in, 26.5_cm / 2);
+lemlib_x::TrackingWheel horizontalTracker('G', 'H', false, 2.75_in, -26.5_cm / 2);
 
-lemlib::TrackingWheelOdometry odom({&imu}, {&verticalTracker}, {&horizontalTracker});
+lemlib_x::TrackingWheelOdometry odom({&imu}, {&verticalTracker}, {&horizontalTracker});
 
-lemlib::PID pid(0.05, 0, 0);
-lemlib::ExitCondition<AngleRange> exitCondition(1_stDeg, 2_sec);
+lemlib_x::PID pid(0.05, 0, 0);
+lemlib_x::ExitCondition<AngleRange> exitCondition(1_stDeg, 2_sec);
 
 void initialize() {
     terminal.setLoggingLevel(logger::Level::DEBUG);
@@ -38,14 +38,14 @@ void initialize() {
             pros::delay(10);
         }
     });
-    lemlib::turnTo(90_cDeg, 100_sec, {.slew = 1},
-                   {
-                       .angularPID = pid,
-                       .exitConditions = std::vector<lemlib::ExitCondition<AngleRange>>({exitCondition}),
-                       .poseGetter = [] -> units::Pose { return odom.getPose(); },
-                       .leftMotors = leftDrive,
-                       .rightMotors = rightDrive,
-                   });
+    lemlib_x::turnTo(90_cDeg, 100_sec, {.slew = 1},
+                    {
+                        .angularPID = pid,
+                        .exitConditions = std::vector<lemlib_x::ExitCondition<AngleRange>>({exitCondition}),
+                        .poseGetter = [] -> units::Pose { return odom.getPose(); },
+                        .leftMotors = leftDrive,
+                        .rightMotors = rightDrive,
+                    });
 }
 
 void disabled() {}

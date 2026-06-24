@@ -2,7 +2,7 @@
 #include "pros/rtos.hpp"
 #include "pros/misc.h"
 
-namespace lemlib {
+namespace lemlib_x {
 MotionCancelHelper::MotionCancelHelper(Time period)
     : m_originalCompStatus(pros::c::competition_get_status()),
       m_prevTime(pros::millis() - to_msec(period)),
@@ -30,4 +30,4 @@ bool MotionCancelHelper::wait() {
 }
 
 Time MotionCancelHelper::getDelta() { return from_msec(pros::millis()) - m_prevPrevTime; }
-} // namespace lemlib
+} // namespace lemlib_x

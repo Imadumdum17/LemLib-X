@@ -1,7 +1,7 @@
 #include "lemlib/ExamplePages.hpp"
 #include "pros/screen.hpp"
 
-namespace lemlib {
+namespace lemlib_x {
 
 // ============== HOME PAGE ==============
 
@@ -148,4 +148,4 @@ void SettingsPage::onEnter() {
     clearScreen();
 }
 
-} // namespace lemlib
+} // namespace lemlib_x

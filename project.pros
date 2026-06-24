@@ -11,7 +11,7 @@
         },
         "name": "hardware",
         "py/object": "pros.conductor.templates.local_template.LocalTemplate",
-        "supported_kernels": "^4.1.1",
+        "supported_kernels": ">=4.1.1 <5.0.0",
         "system_files": [
           "include\\hardware\\Encoder\\ADIEncoder.hpp",
           "include\\hardware\\Encoder\\V5RotationSensor.hpp",

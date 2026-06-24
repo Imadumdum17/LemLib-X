@@ -6,7 +6,7 @@
 #include <functional>
 #include <vector>
 
-namespace lemlib {
+namespace lemlib_x {
 
 /**
  * @brief Base class for display pages

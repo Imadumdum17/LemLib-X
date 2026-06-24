@@ -1,7 +1,7 @@
 #include "lemlib/Page.hpp"
 #include "pros/screen.hpp"
 
-namespace lemlib {
+namespace lemlib_x {
 
 Page::Page(const std::string& name) : name(name) {}
 
@@ -16,4 +16,4 @@ void TouchButton::draw() const {
     pros::screen::print(pros::E_TEXT_MEDIUM_CENTER, centerX, centerY, "%s", label.c_str());
 }
 
-} // namespace lemlib
+} // namespace lemlib_x

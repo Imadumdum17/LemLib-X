@@ -1,7 +1,7 @@
 #include "lemlib/MotionHandler.hpp"
 #include "pros/rtos.hpp"
 
-namespace lemlib::motion_handler {
+namespace lemlib_x::motion_handler {
 // initialize tasks
 static std::optional<pros::Task> motionTask = std::nullopt;
 
@@ -27,4 +27,4 @@ void cancel() {
     // if the task is currently running, notify the task
     if (isMoving()) motionTask->notify();
 }
-} // namespace lemlib::motion_handler
+} // namespace lemlib_x::motion_handler

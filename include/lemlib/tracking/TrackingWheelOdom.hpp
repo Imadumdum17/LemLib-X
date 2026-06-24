@@ -7,7 +7,7 @@
 #include "units/Pose.hpp"
 #include <vector>
 
-namespace lemlib {
+namespace lemlib_x {
 /**
  * @brief class representing a tracking wheel
  *
@@ -370,4 +370,4 @@ class TrackingWheelOdometry {
         std::vector<TrackingWheel*> m_verticalWheels;
         std::vector<TrackingWheel*> m_horizontalWheels;
 };
-} // namespace lemlib
+} // namespace lemlib_x

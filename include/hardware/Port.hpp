@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <algorithm>
 
-namespace lemlib {
+namespace lemlib_x {
 
 namespace detail {
 
@@ -105,4 +105,4 @@ class ADIPort {
         std::uint8_t m_port;
 };
 
-} // namespace lemlib
+} // namespace lemlib_x

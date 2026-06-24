@@ -5,7 +5,7 @@
 #include <optional>
 #include <vector>
 
-namespace lemlib {
+namespace lemlib_x {
 template <isQuantity Q> class ExitCondition {
     public:
         /**
@@ -122,4 +122,4 @@ template <isQuantity Q> class ExitConditionGroup {
     private:
         std::vector<ExitCondition<Q>> m_exitConditions;
 };
-} // namespace lemlib
+} // namespace lemlib_x

@@ -1,0 +1,10 @@
+{
+    "py/object": "pros.conductor.project.Project",
+    "py/state": {
+        "project_name": null,
+        "target": "v5",
+        "templates": {},
+        "upload_options": {},
+        "use_early_access": false
+    }
+}

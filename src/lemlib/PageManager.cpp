@@ -1,7 +1,7 @@
 #include "lemlib/PageManager.hpp"
 #include "pros/screen.hpp"
 
-namespace lemlib {
+namespace lemlib_x {
 
 PageManager::PageManager() : activePage(nullptr) {}
 
@@ -123,4 +123,4 @@ bool PageManager::pageExists(const std::string& pageName) const {
     return pages.count(pageName) > 0;
 }
 
-} // namespace lemlib
+} // namespace lemlib_x

@@ -6,7 +6,7 @@
 #include <map>
 #include <vector>
 
-namespace lemlib {
+namespace lemlib_x {
 
 /**
  * @brief Manages pages and handles page switching with touch navigation
@@ -88,6 +88,6 @@ private:
     bool lastTouchPressed = false;
 };
 
-} // namespace lemlib
+} // namespace lemlib_x
 
 #endif // LEMLIB_PAGE_MANAGER_HPP

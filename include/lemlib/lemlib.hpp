@@ -13,8 +13,9 @@
 #include "lemlib/Page.hpp" // IWYU pragma: keep
 #include "lemlib/PageManager.hpp" // IWYU pragma: keep
 #include "lemlib/ExamplePages.hpp" // IWYU pragma: keep
+#include "lemlib/ImageDisplay.hpp" // IWYU pragma: keep
 
 #ifndef LEMLIB_NO_ALIAS
-namespace ll = lemlib;
-namespace mh = lemlib::motion_handler;
+namespace ll = lemlib_x;
+namespace mh = lemlib_x::motion_handler;
 #endif

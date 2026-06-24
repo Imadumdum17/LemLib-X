@@ -6,7 +6,7 @@
 
 static logger::Helper helper("lemlib/odom/tracking_wheel_odom");
 
-namespace lemlib {
+namespace lemlib_x {
 TrackingWheel::TrackingWheel(Encoder* encoder, Length diameter, Length offset, Number ratio)
     : m_encoder(encoder),
       m_diameter(diameter),
@@ -227,4 +227,4 @@ void TrackingWheelOdometry::update(Time period) {
 }
 
 TrackingWheelOdometry::~TrackingWheelOdometry() { m_task->notify(); }
-}; // namespace lemlib
+}; // namespace lemlib_x

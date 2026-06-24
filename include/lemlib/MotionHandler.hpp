@@ -2,7 +2,7 @@
 
 #include <functional>
 
-namespace lemlib::motion_handler {
+namespace lemlib_x::motion_handler {
 /**
  * @brief run a motion algorithm
  *
@@ -96,4 +96,4 @@ bool isMoving();
  * @endcode
  */
 void cancel();
-} // namespace lemlib::motion_handler
+} // namespace lemlib_x::motion_handler

@@ -6,7 +6,7 @@
 
 using namespace units;
 
-namespace lemlib {
+namespace lemlib_x {
 
 static logger::Helper logHelper("lemlib/motions/moveToPoint");
 
@@ -205,7 +205,7 @@ void follow(const asset& asset, Length lookaheadDistance, Time timeout, FollowPa
     LookaheadPoint lastLookahead = {path.at(0).x, path.at(0).y, 0};
     Number prevVel = 0;
 
-    lemlib::MotionCancelHelper helper(10_msec); // cancel helper
+    MotionCancelHelper helper(10_msec); // cancel helper
     Timer timer(timeout);
     while (!timer.isDone() && helper.wait()) {
         // get the current position of the robot
@@ -261,4 +261,4 @@ void follow(const asset& asset, Length lookaheadDistance, Time timeout, FollowPa
     settings.leftMotors.brake();
     settings.rightMotors.brake();
 }
-} // namespace lemlib
+} // namespace lemlib_x

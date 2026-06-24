@@ -2,7 +2,7 @@
 
 #include "units/units.hpp"
 
-namespace lemlib {
+namespace lemlib_x {
 /**
  * @class MotionCancelHelper
  *
@@ -83,4 +83,4 @@ class MotionCancelHelper {
         const int m_originalCompStatus;
         const Time m_period;
 };
-} // namespace lemlib
+} // namespace lemlib_x

@@ -6,7 +6,7 @@
 
 using namespace units;
 
-namespace lemlib {
+namespace lemlib_x {
 
 static logger::Helper logHelper("lemlib/motions/moveToPose");
 
@@ -19,7 +19,7 @@ void moveToPose(Pose target, Time timeout, MoveToPoseParams params, MoveToPoseSe
     Number prevLateralOut = 0;
     Number prevAngularOut = 0;
 
-    lemlib::MotionCancelHelper helper(10_msec);
+    MotionCancelHelper helper(10_msec);
     // loop until the motion has been cancelled, or the timer is done
     while (helper.wait() && !timer.isDone()) {
         const Pose pose = settings.poseGetter();
@@ -119,4 +119,4 @@ void moveToPose(Pose target, Time timeout, MoveToPoseParams params, MoveToPoseSe
     settings.leftMotors.brake();
     settings.rightMotors.brake();
 }
-} // namespace lemlib
+} // namespace lemlib_x

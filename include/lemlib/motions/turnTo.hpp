@@ -4,7 +4,7 @@
 #include "lemlib/util.hpp"
 #include <functional>
 
-namespace lemlib {
+namespace lemlib_x {
 
 /**
  * @brief Parameters for Chassis::turnToHeading
@@ -47,9 +47,9 @@ struct TurnToSettings {
         /** this function should return the estimated pose of the robot, typically by the tracking wheel odometry. */
         std::function<units::Pose()> poseGetter = pose_getter;
         /** the left motor group of the drivetrain */
-        lemlib::MotorGroup& leftMotors = left_motors;
+        lemlib_x::MotorGroup& leftMotors = left_motors;
         /** the right motor group of the drivetrain */
-        lemlib::MotorGroup& rightMotors = right_motors;
+        lemlib_x::MotorGroup& rightMotors = right_motors;
 };
 
 /**
@@ -61,4 +61,4 @@ struct TurnToSettings {
  * @param settings struct containing settings for the turn
  */
 void turnTo(std::variant<Angle, units::V2Position> target, Time timeout, TurnToParams params, TurnToSettings settings);
-} // namespace lemlib
+} // namespace lemlib_x

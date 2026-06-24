@@ -2,7 +2,7 @@
 
 #include "units/units.hpp"
 
-namespace lemlib {
+namespace lemlib_x {
 class Timer {
     public:
         /**
@@ -199,4 +199,4 @@ class Timer {
         Time m_timeWaited = 0_sec;
         bool m_paused = false;
 };
-} // namespace lemlib
+} // namespace lemlib_x

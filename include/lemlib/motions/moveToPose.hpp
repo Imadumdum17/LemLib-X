@@ -3,7 +3,7 @@
 #include "lemlib/config.hpp"
 #include <functional>
 
-namespace lemlib {
+namespace lemlib_x {
 
 struct MoveToPoseParams {
         bool reversed = false;
@@ -23,10 +23,10 @@ struct MoveToPoseSettings {
         ExitConditionGroup<Length> lateralExitConditions = lateral_exit_conditions;
         ExitConditionGroup<AngleRange> angularExitConditions = angular_exit_conditions;
         std::function<units::Pose()> poseGetter = pose_getter;
-        lemlib::MotorGroup& leftMotors = left_motors;
-        lemlib::MotorGroup& rightMotors = right_motors;
+        MotorGroup& leftMotors = left_motors;
+        MotorGroup& rightMotors = right_motors;
 };
 
 void moveToPose(units::Pose target, Time timeout, MoveToPoseParams params, MoveToPoseSettings settings);
 
-}; // namespace lemlib
+}; // namespace lemlib_x

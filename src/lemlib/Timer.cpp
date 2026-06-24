@@ -1,7 +1,7 @@
 #include "lemlib/Timer.hpp"
 #include "pros/rtos.hpp"
 
-using namespace lemlib;
+using namespace lemlib_x;
 
 Timer::Timer(Time time)
     : m_period(time) {

@@ -6,7 +6,7 @@
 #include "units/Angle.hpp"
 #include <vector>
 
-namespace lemlib {
+namespace lemlib_x {
 /**
  * @brief MotorGroup class
  *
@@ -533,4 +533,4 @@ class MotorGroup : public Encoder {
          */
         std::vector<MotorInfo> m_motors;
 };
-}; // namespace lemlib
+}; // namespace lemlib_x

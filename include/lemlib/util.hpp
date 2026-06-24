@@ -2,7 +2,7 @@
 
 #include "units/Pose.hpp"
 
-namespace lemlib {
+namespace lemlib_x {
 /**
  * @brief AngularDirection
  *
