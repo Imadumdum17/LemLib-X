@@ -1,10 +1,12 @@
 # 8 - Motion Chaining
 
-Autonomous routines are built from short, dependable motions. LemLib-X motions run through the motion handler, so you can either wait for each motion or overlap robot actions while a motion is running.
+Autonomous routines are built from short, dependable motions. LemLib-X motions run through the motion handler, so code after a motion call runs immediately.
 
-## Waiting between motions
+This tutorial shows how to build routines that are readable, testable, and fast enough for competition.
 
-Start with fully blocking sequences. They are easiest to debug.
+## Start with Blocking Motion
+
+The safest pattern is to wait after each motion.
 
 ```cpp
 void waitUntilSettled() {
@@ -27,11 +29,11 @@ void autonomous() {
 }
 ```
 
-Get this version reliable before trying to save time.
+Get the blocking version reliable before optimizing time.
 
-## Run mechanisms during motion
+## Run Mechanisms During Motion
 
-Because motions are asynchronous, code after the motion call runs immediately.
+Because motions are asynchronous, mechanisms can run while the drivetrain moves.
 
 ```cpp
 ll::moveToPoint({36_in, 0_in}, 5_sec, {}, {});
@@ -43,11 +45,27 @@ intake.move(0);
 waitUntilSettled();
 ```
 
-This is useful for intakes, wings, lifts, and other mechanisms that can run while the drivetrain moves.
+This is useful for intakes, lifts, wings, clamps, and other mechanisms that can safely move while driving.
 
-## Start the next motion early
+## Wait for Timing, Then Wait for Motion
 
-Use `minLateralSpeed` and `earlyExitRange` when you want a motion to hand off before perfectly settling.
+Sometimes a mechanism needs to run for a fixed time during a drive.
+
+```cpp
+ll::moveToPoint({30_in, 0_in}, 5_sec, {}, {});
+
+intake.move(1.0);
+pros::delay(700);
+intake.move(0);
+
+waitUntilSettled();
+```
+
+If the drive finishes before the mechanism timing ends, this code still waits for the mechanism. If the mechanism finishes first, it waits for the drive.
+
+## Start the Next Motion Early
+
+Use `minLateralSpeed` and `earlyExitRange` when a motion should hand off before perfectly settling.
 
 ```cpp
 ll::MoveToPointParams fast;
@@ -61,9 +79,9 @@ ll::turnTo(90_cDeg, 2_sec, {}, {});
 waitUntilSettled();
 ```
 
-Only use early exits after the normal settled version works.
+Only use early exits after the normal settled version works. Early exits make routines faster, but they also reduce margin for error.
 
-## Cancel when strategy changes
+## Cancel When Strategy Changes
 
 Cancel the current motion before switching to a different plan.
 
@@ -78,12 +96,12 @@ if (goal_is_blocked()) {
 
 A short delay gives the current motion task time to stop before the next motion starts.
 
-## Build named routine sections
+## Build Named Routine Sections
 
 Small functions make autonomous easier to tune.
 
 ```cpp
-void score_preload() {
+void scorePreload() {
     ll::moveToPose({30_in, 8_in, 45_cDeg}, 5_sec, {}, {});
     waitUntilSettled();
 
@@ -92,7 +110,7 @@ void score_preload() {
     outtake.move(0);
 }
 
-void collect_center() {
+void collectCenter() {
     intake.move(1.0);
 
     ll::follow(center_path_txt, 8_in, 7_sec, {}, {});
@@ -104,26 +122,70 @@ void collect_center() {
 void autonomous() {
     odom.setPose({0_in, 0_in, 0_cDeg});
 
-    score_preload();
-    collect_center();
+    scorePreload();
+    collectCenter();
 }
 ```
 
-## Debugging chained routines
+Prefer names that describe strategy, not implementation. `scorePreload()` is easier to understand than `move1()`.
+
+## Add Checkpoints
+
+Print pose between sections while tuning.
+
+```cpp
+void logPose(const char* label) {
+    const auto pose = odom.getPose();
+    printf("%s: %.1f %.1f %.1f\n",
+           label,
+           to_in(pose.x),
+           to_in(pose.y),
+           to_cDeg(pose.orientation));
+}
+```
+
+Use checkpoints:
+
+```cpp
+scorePreload();
+logPose("after preload");
+
+collectCenter();
+logPose("after center");
+```
+
+When a long routine fails, checkpoints show which section introduced the error.
+
+## Tune One Section at a Time
 
 When a sequence fails, isolate the smallest section that reproduces it.
 
 1. Run only the first motion.
 2. Add the next mechanism action.
 3. Add the next motion.
-4. Retune timeouts and exits only after each piece works alone.
+4. Add timing overlap.
+5. Add early exits last.
 
 Most chaining problems come from an earlier motion ending in a different pose than the next motion expects.
 
-## Final checklist
+## Battery and Field Validation
 
-- Every routine sets the starting pose.
+Test the routine under match-like conditions:
+
+- fresh battery
+- lower battery
+- game objects loaded
+- robot starting slightly off
+- field surface similar to competition
+
+If a routine only works with a perfect setup, slow it down or add more forgiving exits.
+
+## Final Checklist
+
+- Every autonomous routine sets the starting pose.
 - Each motion has a realistic timeout.
-- Mechanisms are stopped when they no longer need to run.
+- Mechanisms stop when they no longer need to run.
 - Early exits are used only where they improve match time.
+- Pose is logged between major sections while tuning.
+- The routine works more than once in a row.
 - The routine still works on a lower battery.

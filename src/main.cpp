@@ -16,7 +16,11 @@ lemlib_x::V5InertialSensor imu(1);
 lemlib_x::TrackingWheel verticalTracker('E', 'F', true, 2.75_in, 26.5_cm / 2);
 lemlib_x::TrackingWheel horizontalTracker('G', 'H', false, 2.75_in, -26.5_cm / 2);
 
-lemlib_x::TrackingWheelOdometry odom({&imu}, {&verticalTracker}, {&horizontalTracker});
+lemlib_x::TrackingWheelOdometry odom(
+    std::vector<lemlib_x::IMU*>{&imu},
+    std::vector<lemlib_x::TrackingWheel*>{&verticalTracker},
+    std::vector<lemlib_x::TrackingWheel*>{&horizontalTracker}
+);
 
 lemlib_x::PID pid(0.05, 0, 0);
 lemlib_x::ExitCondition<AngleRange> exitCondition(1_stDeg, 2_sec);

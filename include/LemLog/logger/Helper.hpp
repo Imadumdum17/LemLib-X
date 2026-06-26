@@ -2,7 +2,8 @@
 
 #include <format>
 #include <string>
-#include "lemlog/logger/Sink.hpp"
+#include <utility>
+#include "LemLog/logger/Sink.hpp"
 
 namespace logger {
 /**

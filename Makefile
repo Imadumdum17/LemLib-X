@@ -23,10 +23,15 @@ USE_PACKAGE:=1
 # EXCLUDE_COLD_LIBRARIES:= $(FWDIR)/your_library.a
 EXCLUDE_COLD_LIBRARIES:= 
 
+# These helper archives are historical build outputs. Their symbols now live in
+# LemLibX.a so downstream projects do not mix archives built with different ABI
+# settings.
+EXCLUDE_LIBRARIES:= $(FWDIR)/hardware.a $(FWDIR)/hot-cold-asset.a $(FWDIR)/lemlog.a $(FWDIR)/units.a
+
 # Set this to 1 to add additional rules to compile your project as a PROS library template
 IS_LIBRARY:=1
 LIBNAME:=LemLibX
-VERSION:=0.1.0
+VERSION:=0.1.2
 # EXCLUDE_SRC_FROM_LIB= $(SRCDIR)/unpublishedfile.c
 # this line excludes opcontrol.c and similar files
 EXCLUDE_SRC_FROM_LIB+=$(foreach file, $(SRCDIR)/main,$(foreach cext,$(CEXTS),$(file).$(cext)) $(foreach cxxext,$(CXXEXTS),$(file).$(cxxext)))

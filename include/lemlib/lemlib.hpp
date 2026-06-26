@@ -9,6 +9,7 @@
 #include "lemlib/motions/moveToPose.hpp" // IWYU pragma: keep
 #include "lemlib/motions/turnTo.hpp" // IWYU pragma: keep
 #include "lemlib/tracking/TrackingWheelOdom.hpp" // IWYU pragma: keep
+#include "hardware/IMU/V5InertialSensor.hpp" // IWYU pragma: keep
 #include "lemlib/MotionHandler.hpp" // IWYU pragma: keep
 #include "lemlib/Page.hpp" // IWYU pragma: keep
 #include "lemlib/PageManager.hpp" // IWYU pragma: keep

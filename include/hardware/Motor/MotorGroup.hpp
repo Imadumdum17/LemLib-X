@@ -515,7 +515,7 @@ class MotorGroup : public Encoder {
          *
          * @return const std::vector<Motor> vector of lemlib::Motor objects
          */
-        const std::vector<Motor> getMotors();
+        std::vector<Motor> getMotors();
         AngularVelocity m_outputVelocity;
         /**
          * This member variable is a vector of motor information

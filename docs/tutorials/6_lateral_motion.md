@@ -1,10 +1,29 @@
 # 6 - Lateral Motion
 
-Use `moveToPoint` for simple driving to a point and `moveToPose` when the final heading matters.
+Lateral motion moves the robot across the field. Use `moveToPoint` for simple travel to a point, and `moveToPose` when the final heading matters.
 
-## Drive to a point
+This tutorial covers:
 
-`moveToPoint` moves the robot toward an X/Y target.
+- choosing between `moveToPoint` and `moveToPose`
+- forward and backward moves
+- speed limits
+- minimum speed and early exits
+- lead tuning
+- drift compensation
+- practical autonomous patterns
+
+## Choose the Right Motion
+
+| Motion | Use when |
+| --- | --- |
+| `moveToPoint` | You only care about the target X/Y position |
+| `moveToPose` | You care about X/Y and final heading |
+| `turnTo` | You only need to rotate |
+| `follow` | You need to follow a curved path |
+
+Start with `moveToPoint`. It is easier to tune because it has fewer goals.
+
+## Drive to a Point
 
 ```cpp
 void autonomous() {
@@ -18,9 +37,9 @@ void autonomous() {
 }
 ```
 
-This is the best first lateral motion because it has fewer moving parts than `moveToPose`.
+The timeout is a safety limit, not the expected time. Give early tests generous timeouts.
 
-## Drive backward
+## Drive Backward
 
 Set `reversed` when the robot should drive backward toward the target.
 
@@ -31,11 +50,11 @@ params.reversed = true;
 ll::moveToPoint({-24_in, 0_in}, 4_sec, params, {});
 ```
 
-Backward moves are often useful when the intake or scoring side of the robot should keep facing forward.
+Backward motion is useful when the scoring side or intake side must keep facing a specific direction.
 
-## Control speed
+## Control Speed
 
-Use max speed to make a motion gentler.
+Limit speed when the robot slips, carries game objects, or approaches a wall.
 
 ```cpp
 ll::MoveToPointParams params;
@@ -45,26 +64,38 @@ params.maxAngularSpeed = 0.45;
 ll::moveToPoint({48_in, 0_in}, 6_sec, params, {});
 ```
 
-Use minimum speed carefully. It helps a robot push through friction, but it can also make the robot overshoot.
+Lower max speed before changing PID if the robot cannot repeat the motion.
+
+## Minimum Speed and Early Exit
+
+Minimum speed can help a heavy robot keep moving, but it can also force overshoot.
 
 ```cpp
+ll::MoveToPointParams params;
 params.minLateralSpeed = 0.12;
 params.earlyExitRange = 2_in;
+
+ll::moveToPoint({36_in, 0_in}, 4_sec, params, {});
 ```
 
-When `minLateralSpeed` is nonzero, `earlyExitRange` lets the motion finish once the robot crosses near the target.
+When using minimum speed, give the motion a reasonable early exit range so it can hand off instead of fighting to settle perfectly.
 
-## Move to a pose
+## Move to a Pose
 
-`moveToPose` drives to a point while also controlling final heading.
+`moveToPose` drives to a target point while also controlling final heading.
 
 ```cpp
 ll::moveToPose({36_in, 24_in, 90_cDeg}, 6_sec, {}, {});
 ```
 
-Use this for scoring positions, match load positions, and any target where orientation matters.
+Use this for:
 
-## Tune the lead value
+- scoring positions
+- match load positions
+- ending next to a field object
+- preparing for a path or turn
+
+## Tune Lead
 
 `lead` controls how far ahead of the target the robot aims while approaching.
 
@@ -75,11 +106,18 @@ params.lead = 0.6;
 ll::moveToPose({36_in, 24_in, 90_cDeg}, 6_sec, params, {});
 ```
 
-Lower lead makes the robot aim more directly at the target. Higher lead makes the approach smoother but can need more space.
+General behavior:
 
-## Prevent slipping
+| Lead | Behavior |
+| --- | --- |
+| Lower | More direct, sharper approach |
+| Higher | Smoother approach, needs more room |
 
-If the robot slides during curved approaches, lower speed first.
+If the robot hooks sharply into the target, raise lead slightly. If it cuts too wide, lower lead.
+
+## Prevent Slipping
+
+For curved approaches, use speed limits and drift compensation.
 
 ```cpp
 ll::MoveToPoseParams params;
@@ -90,11 +128,17 @@ params.driftCompensation = 0.5;
 ll::moveToPose({48_in, 24_in, 90_cDeg}, 7_sec, params, {});
 ```
 
-Retune after changing wheel type, weight distribution, or drive gearing.
+Retune after changing:
 
-## Common pattern
+- wheel type
+- drivetrain gearing
+- robot weight
+- center of gravity
+- field surface
 
-Wrap waiting in a helper to keep autonomous readable.
+## Helper Pattern
+
+Wrap waiting in one helper to keep autonomous readable.
 
 ```cpp
 void waitUntilSettled() {
@@ -102,7 +146,11 @@ void waitUntilSettled() {
         pros::delay(10);
     }
 }
+```
 
+Then build simple sequences:
+
+```cpp
 void autonomous() {
     odom.setPose({0_in, 0_in, 0_cDeg});
 
@@ -113,5 +161,39 @@ void autonomous() {
     waitUntilSettled();
 }
 ```
+
+## Motion Debugging
+
+Print pose before and after each motion.
+
+```cpp
+void printPoseLine(const char* label) {
+    const auto pose = odom.getPose();
+    printf("%s: %.1f %.1f %.1f\n",
+           label,
+           to_in(pose.x),
+           to_in(pose.y),
+           to_cDeg(pose.orientation));
+}
+```
+
+Use it like this:
+
+```cpp
+printPoseLine("before");
+ll::moveToPoint({24_in, 0_in}, 4_sec, {}, {});
+waitUntilSettled();
+printPoseLine("after");
+```
+
+## Troubleshooting Lateral Motion
+
+| Problem | Likely cause | What to try |
+| --- | --- | --- |
+| Robot drives wrong way | Pose or reversed flag wrong | Check starting pose and `params.reversed` |
+| Robot curves badly | Angular PID or motor direction | Tune angular PID, check drivetrain |
+| Stops short | Low `kP`, friction, or strict exit | Raise `kP`, inspect mechanics |
+| Overshoots | Too much speed or `kP` | Lower speed, add `kD` |
+| Position jumps | Bad odometry | Check tracking wheel direction and offsets |
 
 Next: [Pure Pursuit](./7_pure_pursuit.md)

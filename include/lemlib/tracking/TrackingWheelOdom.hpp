@@ -226,8 +226,8 @@ class TrackingWheelOdometry {
          * // there are no sensors available for this measurement
          *
          * // create IMUs
-         * lemlib::V5InertialSensor imu1(1);
-         * lemlib::V5InertialSensor imu2(2);
+         * lemlib_x::V5InertialSensor imu1(1);
+         * lemlib_x::V5InertialSensor imu2(2);
          *
          * // create a vertical tracking wheel
          * lemlib::V5RotationSensor verticalEncoder(3, false);
@@ -236,7 +236,11 @@ class TrackingWheelOdometry {
          * // no horizontal tracking wheels for this example
          *
          * // create a TrackingWheelOdometry instance
-         * lemlib::TrackingWheelOdometry odom({imu1, imu2}, {verticalWheel}, {});
+         * lemlib_x::TrackingWheelOdometry odom(
+         *     std::vector<lemlib_x::IMU*>{&imu1, &imu2},
+         *     std::vector<lemlib_x::TrackingWheel*>{&verticalWheel},
+         *     std::vector<lemlib_x::TrackingWheel*>{}
+         * );
          * @endcode
          *
          * @b Example:
@@ -261,7 +265,11 @@ class TrackingWheelOdometry {
          * lemlib::TrackingWheel horizontalWheel2(&horizontalEncoder2, 2.75_in, -4_in);
          *
          * // create a TrackingWheelOdometry instance
-         * lemlib::TrackingWheelOdometry odom({}, {verticalWheel}, {horizontalWheel1, horizontalWheel2});
+         * lemlib_x::TrackingWheelOdometry odom(
+         *     std::vector<lemlib_x::IMU*>{},
+         *     std::vector<lemlib_x::TrackingWheel*>{&verticalWheel},
+         *     std::vector<lemlib_x::TrackingWheel*>{&horizontalWheel1, &horizontalWheel2}
+         * );
          * @endcode
          */
         TrackingWheelOdometry(std::vector<IMU*> imus, std::vector<TrackingWheel*> verticalWheels,

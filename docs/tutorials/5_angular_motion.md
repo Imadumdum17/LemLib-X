@@ -1,8 +1,19 @@
 # 5 - Angular Motion
 
-Use `turnTo` when the robot needs to face a heading or point before the next action.
+Angular motion controls where the robot faces. Use `turnTo` when the next action depends on orientation: lining up with a goal, facing an object, or preparing for a path.
 
-## Turn to a heading
+This tutorial covers:
+
+- turning to a heading
+- turning to face a point
+- speed limits
+- slew
+- forced direction
+- swing turns
+- cancellation
+- troubleshooting turns
+
+## Turn to a Heading
 
 The simplest turn targets a field-relative heading.
 
@@ -18,9 +29,9 @@ void autonomous() {
 }
 ```
 
-Positive headings use the same angle units as the rest of LemLib-X. Be consistent with your team's coordinate convention when setting the starting pose.
+The target is not "turn 90 degrees from now." It is "face the field heading 90 degrees." If the robot starts at `45_cDeg` and you call `turnTo(90_cDeg, ...)`, it turns about 45 degrees.
 
-## Turn to face a point
+## Turn to Face a Point
 
 `turnTo` can also accept a position. The robot calculates the heading needed to face that point.
 
@@ -28,11 +39,11 @@ Positive headings use the same angle units as the rest of LemLib-X. Be consisten
 ll::turnTo(units::V2Position{24_in, 24_in}, 3_sec, {}, {});
 ```
 
-This is useful before intaking, scoring, or lining up with a field object.
+Use this when the target is an object or location on the field and you do not want to calculate the heading yourself.
 
-## Limit turn speed
+## Limit Turn Speed
 
-Lower the maximum speed when precision matters more than time.
+Lower max speed when precision matters more than time.
 
 ```cpp
 ll::TurnToParams slow_turn;
@@ -41,9 +52,23 @@ slow_turn.maxSpeed = 0.45;
 ll::turnTo(135_cDeg, 4_sec, slow_turn, {});
 ```
 
-Use values from `0` to `1`. A lower maximum speed can reduce overshoot on light or high-traction drivetrains.
+`maxSpeed` is normalized from `0` to `1`. A value around `0.4` to `0.6` is useful for early tuning.
 
-## Use slew for smoother starts
+## Use Minimum Speed Carefully
+
+Minimum speed helps overcome static friction, but it can make turns overshoot.
+
+```cpp
+ll::TurnToParams params;
+params.minSpeed = 0.08;
+params.earlyExitRange = 3_stDeg;
+
+ll::turnTo(90_cDeg, 3_sec, params, {});
+```
+
+When `minSpeed` is nonzero, use `earlyExitRange` so the motion can finish instead of forcing power through the target.
+
+## Use Slew for Smoother Starts
 
 Slew limits how quickly turn power can rise.
 
@@ -54,11 +79,11 @@ smooth_turn.slew = 5;
 ll::turnTo(180_cDeg, 4_sec, smooth_turn, {});
 ```
 
-If the robot snaps into turns and loses traction, reduce max speed or increase smoothing with slew.
+If the robot snaps into turns and loses traction, lower `maxSpeed` or use a gentler slew.
 
-## Force a direction
+## Force a Direction
 
-By default, LemLib-X chooses the shorter turn. You can force a direction for cable routing, mechanism clearance, or field strategy.
+By default, LemLib-X chooses the shorter turn. You can force a direction for strategy or mechanism clearance.
 
 ```cpp
 ll::TurnToParams params;
@@ -67,11 +92,11 @@ params.direction = ll::AngularDirection::CW_CLOCKWISE;
 ll::turnTo(270_cDeg, 4_sec, params, {});
 ```
 
-Only force direction when you need it. The automatic direction is usually faster.
+Only force direction when you need it. Automatic direction is usually faster and simpler.
 
-## Swing turns
+## Swing Turns
 
-Lock one side of the drivetrain to swing around it.
+Swing turns lock one side of the drivetrain and rotate around it.
 
 ```cpp
 ll::TurnToParams swing;
@@ -81,25 +106,61 @@ swing.maxSpeed = 0.5;
 ll::turnTo(45_cDeg, 4_sec, swing, {});
 ```
 
-Swing turns are helpful near walls or game objects, but they need more room on the moving side of the robot.
+Swing turns are useful near walls or game objects, but they need more room on the moving side. Tune them separately from normal turns.
 
-## Cancel a turn
+## Cancel a Turn
 
-Motions run through the motion handler, so they can be cancelled.
+Motions run through the motion handler and can be cancelled.
 
 ```cpp
 ll::turnTo(180_cDeg, 5_sec, {}, {});
 
 if (should_stop_turning()) {
     mh::cancel();
+    pros::delay(20);
 }
 ```
 
-After cancelling, give the motion task a short delay before starting another motion.
+Wait briefly after cancelling before starting another motion so the task has time to stop.
+
+## Build a Turn Test Routine
+
+Test several headings in one routine.
 
 ```cpp
-mh::cancel();
-pros::delay(20);
+void waitUntilSettled() {
+    while (mh::isMoving()) {
+        pros::delay(10);
+    }
+}
+
+void autonomous() {
+    odom.setPose({0_in, 0_in, 0_cDeg});
+
+    ll::turnTo(90_cDeg, 3_sec, {}, {});
+    waitUntilSettled();
+    pros::delay(500);
+
+    ll::turnTo(180_cDeg, 3_sec, {}, {});
+    waitUntilSettled();
+    pros::delay(500);
+
+    ll::turnTo(0_cDeg, 3_sec, {}, {});
+    waitUntilSettled();
+}
 ```
+
+Watch whether the robot is equally good clockwise and counterclockwise. If one direction is much worse, inspect drivetrain friction and motor reversal.
+
+## Troubleshooting Turns
+
+| Problem | Likely cause | What to try |
+| --- | --- | --- |
+| Overshoots | `kP` too high or `kD` too low | Lower angular `kP`, raise `kD` |
+| Oscillates | Too aggressive | Lower `kP`, lower max speed |
+| Starts too harshly | Too much acceleration | Add slew or lower max speed |
+| Stops short | `kP` too low or friction | Raise `kP`, add tiny `minSpeed` |
+| Wrong final heading | Starting pose or IMU wrong | Reset pose, recalibrate IMU |
+| Turns wrong direction | Coordinate assumption wrong | Verify heading sign on screen |
 
 Next: [Lateral Motion](./6_lateral_motion.md)

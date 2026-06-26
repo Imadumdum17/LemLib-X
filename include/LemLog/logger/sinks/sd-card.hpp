@@ -1,6 +1,6 @@
 #pragma once
 
-#include "lemlog/logger/Sink.hpp"
+#include "LemLog/logger/Sink.hpp"
 
 namespace logger {
 /**

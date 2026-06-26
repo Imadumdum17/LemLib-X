@@ -1,10 +1,20 @@
 # 3 - Driver Control
 
-Autonomous tuning is much easier when driver control is boringly reliable. This tutorial adds a clean tank drive, brake mode setup, and a quick sensor display.
+Good autonomous starts with predictable driver control. Before tuning motions, make sure motors, brake modes, joystick scaling, and odometry feedback are all behaving.
 
-## Basic tank drive
+This tutorial covers:
 
-Tank drive maps the left stick to the left motors and the right stick to the right motors.
+- tank drive
+- arcade drive
+- deadbands
+- brake modes
+- slow mode
+- sensor display
+- pre-autonomous validation
+
+## Tank Drive
+
+Tank drive maps one joystick to each side of the drivetrain.
 
 ```cpp
 void opcontrol() {
@@ -22,11 +32,11 @@ void opcontrol() {
 }
 ```
 
-If one side moves backward, reverse that side's ports in the `MotorGroup` constructor.
+Tank drive is the easiest mode for checking motor direction because each side is independent.
 
-## Arcade drive
+## Arcade Drive
 
-Arcade drive uses one stick for forward motion and one stick for turning.
+Arcade drive uses one stick for forward movement and one stick for turning.
 
 ```cpp
 void opcontrol() {
@@ -44,11 +54,51 @@ void opcontrol() {
 }
 ```
 
-If the robot turns the wrong way, swap the signs on `turn`.
+If the robot turns the wrong direction, swap the signs on `turn`.
 
-## Brake mode
+## Add a Deadband
 
-Set a brake mode during initialization.
+Controller sticks often report tiny values even when centered. A deadband prevents drift.
+
+```cpp
+double applyDeadband(double value) {
+    if (std::abs(value) < 0.05) return 0;
+    return value;
+}
+```
+
+Use it on joystick inputs:
+
+```cpp
+const double throttle = applyDeadband(
+    controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) / 127.0
+);
+```
+
+Keep the deadband small. A large deadband makes the robot feel jumpy when the stick leaves center.
+
+## Add Slow Mode
+
+Slow mode helps drivers line up carefully.
+
+```cpp
+double scaleDrive(double value, bool slow_mode) {
+    return slow_mode ? value * 0.45 : value;
+}
+```
+
+Use a controller button to enable it:
+
+```cpp
+const bool slow = controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1);
+
+left_motors.move(scaleDrive(throttle + turn, slow));
+right_motors.move(scaleDrive(throttle - turn, slow));
+```
+
+## Brake Modes
+
+Set brake modes once during initialization.
 
 ```cpp
 void initialize() {
@@ -58,51 +108,91 @@ void initialize() {
     right_motors.setBrakeMode(ll::BrakeMode::BRAKE);
 
     imu.calibrate();
-    pros::delay(3000);
+    while (imu.isCalibrating()) {
+        pros::delay(20);
+    }
+
     odom.startTask();
 }
 ```
 
-Use `COAST` for smoother manual driving, `BRAKE` for predictable autonomous stops, and `HOLD` only when you need the drivetrain to resist movement while stopped.
+Use this guide:
 
-## Add a deadband
+| Mode | Behavior | Use for |
+| --- | --- | --- |
+| `COAST` | Rolls after power is removed | Smooth driver practice |
+| `BRAKE` | Actively slows when stopped | Most autonomous |
+| `HOLD` | Holds position | Rare drivetrain cases |
 
-A deadband prevents tiny joystick values from moving the robot.
+Avoid `HOLD` on the drivetrain unless you really need it; it can fight drivers and heat motors.
+
+## Display Odometry While Driving
+
+Print pose values so drivers can see whether odometry is plausible.
 
 ```cpp
-double apply_deadband(double value) {
-    if (std::abs(value) < 0.05) return 0;
-    return value;
+void printPose() {
+    const auto pose = odom.getPose();
+    pros::lcd::print(0, "X: %.1f", to_in(pose.x));
+    pros::lcd::print(1, "Y: %.1f", to_in(pose.y));
+    pros::lcd::print(2, "H: %.1f", to_cDeg(pose.orientation));
 }
 ```
 
-Use it before commanding the motors.
+Call it in the driver loop:
 
 ```cpp
-const double throttle = apply_deadband(
-    controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) / 127.0
-);
+while (true) {
+    // drive code
+    printPose();
+    pros::delay(10);
+}
 ```
 
-## Display odometry while driving
-
-Keep an eye on pose values while you drive by hand.
+## Full Driver Control Example
 
 ```cpp
-const auto pose = odom.getPose();
-pros::lcd::print(0, "X: %.1f", to_in(pose.x));
-pros::lcd::print(1, "Y: %.1f", to_in(pose.y));
-pros::lcd::print(2, "H: %.1f", to_cDeg(pose.orientation));
+double applyDeadband(double value) {
+    if (std::abs(value) < 0.05) return 0;
+    return value;
+}
+
+void opcontrol() {
+    pros::Controller controller(pros::E_CONTROLLER_MASTER);
+
+    while (true) {
+        double throttle = controller.get_analog(pros::E_CONTROLLER_ANALOG_LEFT_Y) / 127.0;
+        double turn = controller.get_analog(pros::E_CONTROLLER_ANALOG_RIGHT_X) / 127.0;
+
+        throttle = applyDeadband(throttle);
+        turn = applyDeadband(turn);
+
+        if (controller.get_digital(pros::E_CONTROLLER_DIGITAL_L1)) {
+            throttle *= 0.45;
+            turn *= 0.45;
+        }
+
+        left_motors.move(throttle + turn);
+        right_motors.move(throttle - turn);
+
+        printPose();
+        pros::delay(10);
+    }
+}
 ```
 
-Drive forward 24 inches. If the position changes backward or sideways, fix tracking wheel direction and offsets before tuning autonomous.
+## Pre-Autonomous Validation
 
-## Pre-autonomous checks
+Before tuning autonomous, run these tests:
 
-- Both sides move forward with positive motor power.
-- The robot can drive straight by hand.
-- The heading changes when the robot turns.
-- X and Y change in a way that matches your coordinate system.
-- Brake mode feels predictable at the end of driver movements.
+| Test | Expected result |
+| --- | --- |
+| Drive straight forward | Robot drives forward, not angled sharply |
+| Rotate in place | Heading changes smoothly |
+| Push forward by hand | X changes, Y stays mostly stable |
+| Rotate by hand | Heading changes, position does not jump wildly |
+| Stop from full speed | Brake mode feels predictable |
+
+If the robot cannot drive straight manually, do not tune PID yet. Fix motors, gearing, wiring, friction, and sensor direction first.
 
 Next: [PID Tuning](./4_pid_tuning.md)
